@@ -12,6 +12,6 @@ namespace GildedRoseKata
         public bool IsAgedBrie => Name == "Aged Brie";
         public bool NotIncreasesPassesTime => !IsAgedBrie && !IsConcert;
         public bool QualityIsNotNegative => Quality > 0;
-        public bool QualityIsLessThan50 => Quality < 50;
+        public bool QualityIsBelow50 => Quality < 50;
     }
 }
