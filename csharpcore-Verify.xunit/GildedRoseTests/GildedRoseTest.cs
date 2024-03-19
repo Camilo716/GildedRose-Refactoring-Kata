@@ -31,5 +31,18 @@ namespace GildedRoseTests
 
             Assert.Equal(1, Items[0].Quality);
         }
+
+        [Fact]
+        public void OnceSellDatePassedQualityDegradesTwiceAsFast()
+        {
+            List<Item> Items = [ new Item { Name = "foo", SellIn = 1, Quality = 6 }];
+            GildedRose app = new(Items);         
+            
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality(); 
+        
+            Assert.Equal(1, Items[0].Quality);
+        }
     }
 }
