@@ -7,12 +7,29 @@ namespace GildedRoseTests
     public class GildedRoseTest
     {
         [Fact]
-        public void foo()
+        public void SellInDayReducesPassingTheDays()
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
-            GildedRose app = new GildedRose(Items);
+            List<Item> Items = [ new Item { Name = "foo", SellIn = 10, Quality = 0 }];
+            GildedRose app = new(Items);
+
             app.UpdateQuality();
-            Assert.Equal("fixme", Items[0].Name);
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(7, Items[0].SellIn);
+        }
+
+        [Fact]
+        public void QualityReducesPassingTheDays()
+        {
+            List<Item> Items = [ new Item { Name = "foo", SellIn = 10, Quality = 4 }];
+            GildedRose app = new(Items); 
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(1, Items[0].Quality);
         }
     }
 }

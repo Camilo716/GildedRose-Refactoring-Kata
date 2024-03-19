@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 
 using VerifyXunit;
 
-using Xunit;
-
 namespace GildedRoseTests
 {
     public class ApprovalTest
     {
-        [Fact]
+
         public Task ThirtyDays()
         {
             var fakeoutput = new StringBuilder();
