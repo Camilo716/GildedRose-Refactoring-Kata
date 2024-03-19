@@ -22,19 +22,7 @@ namespace GildedRoseKata
                     item.Quality++;
 
                     if (item.IsConcert)
-                    {
-                        if (item.SellIn < 11)
-                        {
-                            if (item.QualityIsBelow50)
-                                item.Quality++;
-                        }
-
-                        if (item.SellIn < 6)
-                        {
-                            if (item.QualityIsBelow50)
-                                item.Quality++;
-                        }
-                    }
+                        CaculateQualityIncreasingForConcert(item);
                 }
 
                 if (!item.IsLegendary)
@@ -55,6 +43,17 @@ namespace GildedRoseKata
                 if(item.IsAgedBrie && item.QualityIsBelow50)
                     item.Quality++;
             }
+        }
+
+        private static void CaculateQualityIncreasingForConcert(Item item)
+        {
+            if(!item.QualityIsBelow50) return;
+
+            if (item.SellIn <= 10)
+                item.Quality++;
+
+            if (item.SellIn <= 5)
+                item.Quality++;
         }
     }
 }
