@@ -44,5 +44,19 @@ namespace GildedRoseTests
         
             Assert.Equal(1, Items[0].Quality);
         }
+
+        [Fact]
+        public void TheQualityOfAnItemIsNeverNegative()
+        {
+            List<Item> Items = [ new Item { Name = "foo", SellIn = 1, Quality = 0 }];
+            GildedRose app = new(Items);
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(0, Items[0].Quality);
+        }   
     }
 }
