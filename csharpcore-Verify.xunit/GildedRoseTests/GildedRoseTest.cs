@@ -84,5 +84,32 @@ namespace GildedRoseTests
 
             Assert.Equal(6, Items[0].Quality);
         }
+
+        [Fact]
+        public void TheQualityOfAnItemIsNeverMoreThan50()
+        {
+            List<Item> Items = [ new Item { Name = "Aged Brie", SellIn = 1, Quality = 49 }];
+            GildedRose app = new(Items); 
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(50, Items[0].Quality);
+        }
+
+        [Fact]
+        public void LegendaryItemsNeverHasToBeSoldOrDecreasesInQuality()
+        {
+            List<Item> Items = [ new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 10, Quality = 10 }];
+            GildedRose app = new(Items); 
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(10, Items[0].Quality);
+            Assert.Equal(10, Items[0].SellIn);
+        }
     }
 }
