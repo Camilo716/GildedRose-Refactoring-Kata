@@ -12,78 +12,48 @@ namespace GildedRoseKata
 
         public void UpdateQuality()
         {
-            for (var i = 0; i < Items.Count; i++)
+            foreach (Item item in Items)
             {
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                {
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                        {
-                            Items[i].Quality = Items[i].Quality - 1;
-                        }
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
+                if (item.NotIncreasesPassesTime && item.QualityIsNotNegative && !item.IsLegendary)
+                    item.Quality--;
 
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].SellIn < 11)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
+                if(!item.NotIncreasesPassesTime && item.QualityIsBelow50)
+                {
+                    item.Quality++;
 
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-                        }
-                    }
+                    if (item.IsConcert)
+                        CaculateQualityIncreasingForConcert(item);
                 }
 
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
+                if (!item.IsLegendary)
+                    item.SellIn--;
+
+                if (item.SellIn >= 0)
+                    continue;
+
+                if (!item.IsAgedBrie)
                 {
-                    Items[i].SellIn = Items[i].SellIn - 1;
+                    if (!item.IsConcert && item.QualityIsNotNegative && !item.IsLegendary)
+                        item.Quality--;
+                    
+                    if(item.IsConcert)
+                        item.Quality = 0;
                 }
 
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    Items[i].Quality = Items[i].Quality - 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                        }
-                    }
-                    else
-                    {
-                        if (Items[i].Quality < 50)
-                        {
-                            Items[i].Quality = Items[i].Quality + 1;
-                        }
-                    }
-                }
+                if(item.IsAgedBrie && item.QualityIsBelow50)
+                    item.Quality++;
             }
+        }
+
+        private static void CaculateQualityIncreasingForConcert(Item item)
+        {
+            if(!item.QualityIsBelow50) return;
+
+            if (item.SellIn <= 10)
+                item.Quality++;
+
+            if (item.SellIn <= 5)
+                item.Quality++;
         }
     }
 }

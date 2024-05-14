@@ -7,12 +7,109 @@ namespace GildedRoseTests
     public class GildedRoseTest
     {
         [Fact]
-        public void foo()
+        public void SellInDayReducesPassingTheDays()
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
-            GildedRose app = new GildedRose(Items);
+            List<Item> Items = [ new Item { Name = "foo", SellIn = 10, Quality = 0 }];
+            GildedRose app = new(Items);
+
             app.UpdateQuality();
-            Assert.Equal("fixme", Items[0].Name);
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(7, Items[0].SellIn);
+        }
+
+        [Fact]
+        public void QualityReducesPassingTheDays()
+        {
+            List<Item> Items = [ new Item { Name = "foo", SellIn = 10, Quality = 4 }];
+            GildedRose app = new(Items); 
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(1, Items[0].Quality);
+        }
+
+        [Fact]
+        public void OnceSellDatePassedQualityDegradesTwiceAsFast()
+        {
+            List<Item> Items = [ new Item { Name = "foo", SellIn = 1, Quality = 6 }];
+            GildedRose app = new(Items);         
+            
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality(); 
+        
+            Assert.Equal(1, Items[0].Quality);
+        }
+
+        [Fact]
+        public void TheQualityOfAnItemIsNeverNegative()
+        {
+            List<Item> Items = [ new Item { Name = "foo", SellIn = 1, Quality = 0 }];
+            GildedRose app = new(Items);
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(0, Items[0].Quality);
+        }
+
+        [Fact]
+        public void AgedBrieItemIncreasesInQualityTheOlderItGets()
+        {
+            List<Item> Items = [ new Item { Name = "Aged Brie", SellIn = 3, Quality = 1 }];
+            GildedRose app = new(Items);
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(4, Items[0].Quality);
+        }
+
+        [Fact]
+        public void OnceSellDatePassedAgedBrieItemQualityIncreasesTwiceAsFast()
+        {
+            List<Item> Items = [ new Item { Name = "Aged Brie", SellIn = 1, Quality = 1 }];
+            GildedRose app = new(Items);
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(6, Items[0].Quality);
+        }
+
+        [Fact]
+        public void TheQualityOfAnItemIsNeverMoreThan50()
+        {
+            List<Item> Items = [ new Item { Name = "Aged Brie", SellIn = 1, Quality = 49 }];
+            GildedRose app = new(Items); 
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(50, Items[0].Quality);
+        }
+
+        [Fact]
+        public void LegendaryItemsNeverHasToBeSoldOrDecreasesInQuality()
+        {
+            List<Item> Items = [ new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 10, Quality = 10 }];
+            GildedRose app = new(Items); 
+
+            app.UpdateQuality();
+            app.UpdateQuality();
+            app.UpdateQuality();
+
+            Assert.Equal(10, Items[0].Quality);
+            Assert.Equal(10, Items[0].SellIn);
         }
     }
 }
